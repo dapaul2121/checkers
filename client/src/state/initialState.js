@@ -12,6 +12,7 @@ const createInitialBoardState = () => {
 }
 
 const generateSquare = (i,j) => {
+    const id = i * 8 + j
     let offset = 0
     if (i % 2 === 0) {
         offset = 1
@@ -30,7 +31,7 @@ const generateSquare = (i,j) => {
             player = 2
         }
     }
-    return {row, col, player, isKing, isSelected: false}
+    return {row, col, player, id, isKing, isSelected: false}
 
 }
 

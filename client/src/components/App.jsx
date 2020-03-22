@@ -18,6 +18,8 @@ class App extends React.Component {
     componentDidMount() {
     }
 
+
+
     pieceOnSquare(row, col) {
         if (this.state.board[row][col].player) {
             return true
