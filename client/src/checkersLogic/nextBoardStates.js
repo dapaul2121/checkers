@@ -5,52 +5,52 @@ const copyBoard = (board) => {
     for (let i = 0; i < board.length; i++) {
         let newRow = []
         for (let j = 0; j < board[i].length; j++) {
-            newRow.push(board[i][j])
+            newRow.push(Object.assign({}, board[i][j]))
         }
+        newBoard.push(newRow)
     }
     return newBoard
 }
 
 const emptySquare = (row, col, board) => {
-    
-
+    const square = board[row][col]
+    return {row: square.row, col: square.col, player: null, isKing: null, isSelected: false}
 }
 
 
 
 const getMovableVerticalDirecton = (player1Turn) => {
     if (player1Turn === true) {
-        return -1
+        return 1
     }
-    return 1
+    return -1
 }
 
 
 
 const getSquareSingleMoves = (row, col, state) => {
     const player1Turn = state.player1Turn
-    // const player
-    // if (player1Turn === true) {
-    //     player = 1
-    // } else {
-    //     player = 2
-    // }
     const board = state.board
     let moves = [[row + getMovableVerticalDirecton(player1Turn), col + 1], [row + getMovableVerticalDirecton(player1Turn), col - 1]]
     if (state.board[row][col].isKing === true) {
         moves.concat([[row - getMovableVerticalDirecton(player1Turn), col + 1], [row - getMovableVerticalDirecton(player1Turn), col - 1]])
     }
 
-    for (let i = 0; i < moves.length; i++) {
-        if (board[moves[i][0]]) {
-            if (!board[moves[i][0]][moves[i][1]]) {
-                let newBoard = copyBoard(board)
+    let newBoards = []
 
+    for (let i = 0; i < moves.length; i++) {
+        let newRow = moves[i][0]
+        let newCol = moves[i][1]
+        if (board[newRow]) {
+            if (board[newRow][newCol].player === null) {
+                let newBoard = copyBoard(board)
+                newBoard[newRow][newCol] = Object.assign({}, board[row][col])
+                newBoard[row][col] = emptySquare(row, col, board)
+                newBoards.push(newBoard)
             }
         }
     }
-
-
+    return newBoards
 }
 
 const getPlayerPieces = (state) => {
@@ -64,7 +64,7 @@ const getPlayerPieces = (state) => {
     }
     const allPieces = []
     board.flat().map((square) => {
-        if (square.player = player) {
+        if (square.player === player) {
             allPieces.push(square)
         }
     })
@@ -77,7 +77,8 @@ const nextBoardStates = (state) => {
     return null
 }
 
-console.log(getPlayerPieces(state))
+// console.log(getPlayerPieces(state))
+console.log(getSquareSingleMoves(2, 1, state))
 
 
 module.exports.nextBoardStates = nextBoardStates
